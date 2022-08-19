@@ -2,12 +2,15 @@
 <h4> ip address anonymizer only for our research usage (for linux, iproute2)
 
 ## ip_route.cc
+Compile & run "./main ip_route_file"
 <h4> Input: ip route, Output: anonymized_ip_address output_interface weight <br>
 
 ## ip_6_route.cc
+Compile & run "./main ip_6_route_file"
 <h4> Input: ip -6 route, Output: anonymized_ip_address output_interface weight <br>
 
 ## ip_j_addr.cc
+Compile & run "./main ip_j_addr_file"
 <h4> Input: ip -j addr, Output: interface INET addr prefixlen scope <br>
 
 ## How to run
