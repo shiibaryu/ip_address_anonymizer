@@ -107,10 +107,6 @@ int anonymize_ipv6_addr(int prefix_len, uint8_t *addr, string saddr)
 
 unsigned int anonymize_ipv4_addr(int prefix_len, unsigned int addr)
 {
-	if(prefix_len == 0){
-		return addr;
-	}
-
 	unsigned int bit1 = 0b011101111001010110110101;
 	bit1 = bit1 << 8;
 
