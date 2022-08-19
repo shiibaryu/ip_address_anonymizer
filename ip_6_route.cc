@@ -149,24 +149,13 @@ int anonymize_addr(int prefix_len, uint8_t *addr, string saddr)
 		return 1;
 	}
 
-	int bit1 = 0b01010101;
-	int bit2 = 0b01010101;
-	int bit3 = 0b10110101;
-	int bit4 = 0b01101010;
-	int bit5 = 0b10100010;
-	int bit6 = 0b11111011;
-	int bit7 = 0b10001010;
-	int bit8 = 0b10101001;
+	int bits[8] = {0b01010101, 0b01010101, 0b10110101, 0b01101010, 0b10100010,0b11111011,0b10001010,0b10101001};
 	
+	//cout << prefix_len << endl;
 	
-	addr[0] = addr[0] ^ bit1;
-	addr[1] = addr[1] ^ bit2;
-	addr[2] = addr[2] ^ bit3;
-	addr[3] = addr[3] ^ bit4;
-	addr[4] = addr[4] ^ bit5;
-	addr[5] = addr[5] ^ bit6;
-	addr[6] = addr[6] ^ bit7;
-	addr[7] = addr[7] ^ bit8;
+	for(int i=0;i<prefix_len/8 || i < 8;i++){
+		addr[i] = addr[i] ^ bits[i]; 
+	}
 
 	return 0;
 }
