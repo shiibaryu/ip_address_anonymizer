@@ -10,6 +10,8 @@ using namespace std;
 
 #define BIT_TEST(k, b)  (((uint8_t *)(k))[(b) >> 3] & (0x80 >> ((b) & 0x7)))}
 
+int prefixlen = 0;
+
 bool inet6_lnaof(struct in6_addr *dst, struct in6_addr *src, struct in6_addr *netmask)
 {
         bool has_lna = false;
@@ -118,9 +120,23 @@ unsigned int anonymize_addr(int prefix_len, unsigned int addr)
 	unsigned int bit1 = 0b011101111001010110110101;
 	bit1 = bit1 << 8;
 
-	return addr ^ bit1;
-}
+	unsigned int nmask = 0;
 
+	for(int j=0;j<prefixlen;j++){
+		nmask = nmask << 1;
+		nmask = nmask | 1;
+	}
+
+	nmask = nmask << (32-prefixlen);
+
+	addr = addr ^ bit1;
+	
+	if(prefixlen == 32){
+		return addr;
+	}
+
+	return addr & nmask;
+}
 
 unsigned int get_uint_ipv4_addr(string addr)
 {
@@ -135,6 +151,8 @@ unsigned int get_uint_ipv4_addr(string addr)
 	}
 	
 	if(i == (addr.length()-1)){
+		prefixlen = 32;
+
 		int ret = inet_pton(AF_INET, addr.c_str(), &(sa.sin_addr));	
 		if(ret == -1){
 			perror("inet_pton");
@@ -148,7 +166,11 @@ unsigned int get_uint_ipv4_addr(string addr)
 
 		string prefix_len = addr.substr(i+1);
 		int plen = stoi(prefix_len);
-
+		if(plen == 0){
+			plen = 32;
+		}
+	
+		prefixlen = plen;
 
 		unsigned int nmask = 0;
 
@@ -173,7 +195,8 @@ unsigned int get_uint_ipv4_addr(string addr)
 
 void extract_fib_line(string *elms, int size, string mult_path_addr)
 {
-        int prefix_len;
+        prefixlen = 0;
+	int prefix_len = 0;
 	unsigned int saddr;
 
 	string addr;
@@ -196,7 +219,7 @@ void extract_fib_line(string *elms, int size, string mult_path_addr)
 		}
 
 		saddr = get_uint_ipv4_addr(addr);
-		saddr = anonymize_addr(prefix_len, saddr);
+		saddr = anonymize_addr(prefixlen, saddr);
 		
 		cout << bitset<32>(saddr);
 		cout << " " << inf[0] << " " << weight << endl; 
@@ -215,7 +238,7 @@ void extract_fib_line(string *elms, int size, string mult_path_addr)
 		}
 
 		saddr = get_uint_ipv4_addr(addr);
-		saddr = anonymize_addr(prefix_len, saddr);
+		saddr = anonymize_addr(prefixlen, saddr);
 		
 		cout << bitset<32>(saddr);
 		cout << " " << inf[0] << " " << weight << endl; 
@@ -255,7 +278,7 @@ void extract_fib_line(string *elms, int size, string mult_path_addr)
 			}
 			else{
 				saddr = get_uint_ipv4_addr(addr);
-				saddr = anonymize_addr(32, saddr);
+				saddr = anonymize_addr(prefixlen, saddr);
 			}
 
 			cout << bitset<32>(saddr);
@@ -284,7 +307,7 @@ void extract_fib_line(string *elms, int size, string mult_path_addr)
 		}
 
 		saddr = get_uint_ipv4_addr(addr);
-		saddr = anonymize_addr(prefix_len, saddr);
+		saddr = anonymize_addr(prefixlen, saddr);
 		
 		cout << bitset<32>(saddr);
 		cout << " " << inf[0] << " " << weight << endl; 
@@ -304,7 +327,7 @@ void extract_fib_line(string *elms, int size, string mult_path_addr)
 		}
 
 		saddr = get_uint_ipv4_addr(addr);
-		saddr = anonymize_addr(prefix_len, saddr);
+		saddr = anonymize_addr(prefixlen, saddr);
 		
 		cout << bitset<32>(saddr);
 		cout << " " << inf[0] << " " << weight << endl; 
@@ -342,7 +365,7 @@ void extract_fib_line(string *elms, int size, string mult_path_addr)
 		}
 		else{
 			saddr = get_uint_ipv4_addr(addr);
-			saddr = anonymize_addr(32, saddr);
+			saddr = anonymize_addr(prefixlen, saddr);
 		}
 
 		cout << bitset<32>(saddr);
