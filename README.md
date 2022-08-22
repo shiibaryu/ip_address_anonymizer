@@ -14,11 +14,13 @@ Compile & run "./main ip_j_addr_file"
 <h4> Input: ip -j addr, Output: interface INET addr prefixlen scope <br>
 
 ## How to run
-run "bash run.sh" <br>
+1. Collecting IPv4/IPv6 FIBs & Interface information on each node by running ip_get.sh <br>
+2. Running "bash run.sh" to anonymize all information <br>
+3. All reulting files are stored in "ano_data" repository
 
 ## Requirement
 Json library: https://nlohmann.github.io/json/ <br>
 Install: https://www.howtoinstall.me/ubuntu/18-04/nlohmann-json-dev/
 
 ## How to anonymize
-Applying XOR to ip address using randimized bit sequences (*only for our research usage, not generalized) # ip_address_anonymizer
+Applying XOR to ip address using randimized bit sequences (*only for our research usage, not generalized) 
