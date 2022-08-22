@@ -12,7 +12,7 @@ using namespace std;
 
 unsigned int anonymize_ipv4_addr(int prefix_len, unsigned int addr)
 {
-	unsigned int bit1 = 0b011101111001010110110101;
+	unsigned int bit1 = 0b111111111001010110110101;
 	bit1 = bit1 << 8;
 
 	return addr ^ bit1;
