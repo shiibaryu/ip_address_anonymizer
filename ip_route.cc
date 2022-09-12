@@ -252,7 +252,7 @@ void extract_fib_line(string *elms, int size, string mult_path_addr)
 			string action = "mode encap";
 			
 			struct in6_addr masked;
-
+	
                 	prefix_len = convert_v6addr_to_uint(v6a,&masked);
                 	if(prefix_len == -1){
                         	cout << "error at convert_v6addr_to_uint()" << endl;
@@ -277,6 +277,7 @@ void extract_fib_line(string *elms, int size, string mult_path_addr)
 				saddr = get_uint_ipv4_addr(addr);
 			}
 			else{
+				/* koko !*/
 				saddr = get_uint_ipv4_addr(addr);
 				saddr = anonymize_addr(prefixlen, saddr);
 			}
@@ -394,6 +395,7 @@ void read_linux_fib(string path)
         read_file.open(path, ios::in);
 
         while(getline(read_file,line)){
+		cout << line << endl;
                 string iptable_elms[30];
 
                 while(cur_idx <= line.length()){
@@ -410,7 +412,7 @@ void read_linux_fib(string path)
                         prev_idx = cur_idx-1;
                 }
 
-                if(iptable_elms[1] == "proto" || iptable_elms[1] == "nhid" || iptable_elms[1] == "metric"){
+                if(iptable_elms[1] == "proto" || iptable_elms[1] == "nhid" || iptable_elms[1] == "metric" || iptable_elms[1] == "table"){
                         mult_path_addr = iptable_elms[0];
                 }
 
